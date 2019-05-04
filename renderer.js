@@ -1,3 +1,18 @@
-// This file is required by the index.html file and will
-// be executed in the renderer process for that window.
-// All of the Node.js APIs are available in this process.
+const mongo = require('mongodb').MongoClient;
+
+var url = "mongodb://localhost:27017/employeedata";
+
+mongo.connect(url,{useNewUrlParser:true},function(err,db){
+    if (err) throw err;
+    console.log("1.db created Wohoo");
+    var dbo = db.db('employeedata');
+    dbo.createCollection("records",function(err,res){
+        if (err) throw err;
+        console.log("collection created");
+        res.insertOne({name:"sourav",salary:42000},function(err,res){
+            if (err) throw err;
+            console.log("record inserted");
+            db.close();
+        });
+    });
+});
